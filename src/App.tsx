@@ -42,7 +42,7 @@ const App = () => {
       </header>
 
       <main className="max-w-4xl mx-auto mb-4 space-y-2">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center flex-col sm:flex-row sm:space-x-4 gap-2 sm:gap-4">
           <SearchBar onSearch={handleSearch} />
           {typesLoading ? (
             <p className="text-white">Loading types...</p>
