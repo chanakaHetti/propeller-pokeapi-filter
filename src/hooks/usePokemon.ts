@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 import { removeDuplicates } from '../utils/removeDuplicates';
+import { filterAndSortPokemon } from '../utils/pokemonUtils';
 import { Pokemon } from '../types';
 
 export const usePokemon = (
@@ -56,7 +57,7 @@ export const usePokemon = (
       setPokemonList(uniquePokemon);
       setNext(response.data.next);
     } catch (error) {
-      console.error('Error fetching Pokémon data:', error);
+      console.error('Error fetching data: ', error);
     } finally {
       setLoading(false);
     }
@@ -67,22 +68,12 @@ export const usePokemon = (
   }, [fetchPokemon]);
 
   useEffect(() => {
-    let filtered = pokemonList.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = filterAndSortPokemon(
+      pokemonList,
+      searchTerm,
+      selectedType,
+      sortOrder
     );
-
-    if (selectedType) {
-      filtered = filtered.filter((pokemon) =>
-        pokemon.types.includes(selectedType)
-      );
-    }
-
-    filtered.sort((a, b) =>
-      sortOrder === 'asc'
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
-    );
-
     setFilteredPokemon(filtered);
   }, [searchTerm, selectedType, sortOrder, pokemonList]);
 
